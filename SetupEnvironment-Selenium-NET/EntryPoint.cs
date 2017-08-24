@@ -35,16 +35,16 @@ class EntryPoint
                 if (dDownMenuElement.GetAttribute("checked") == "true")
                 {
                     TextMessage(dDownMenuElement.GetAttribute("value"));
-                    GreenMessage("This radio button is checked");
+                    GreenMessage("This drop down element is selected");
                 }
                 else
                 {
-                    TextMessage("This is NOT checked");
+                    TextMessage("This is NOT selected");
                 }
             }
             catch (NoSuchElementException)
             {
-                RedMessage("I am NOT seeing radio button I expect to see");
+                RedMessage("I am NOT seeing drop down element I expect to see");
             }
 
             Thread.Sleep(3000);
