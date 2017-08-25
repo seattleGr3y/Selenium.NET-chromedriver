@@ -1,4 +1,4 @@
-﻿
+
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -9,47 +9,46 @@ class EntryPoint
     static IWebDriver driver = new ChromeDriver();
     static IWebElement dropDownMenu;
     static IWebElement dDownMenuElement;
+    static string dDownSelection;
 
     static void Main()
     {
         string url = "http://testing.todvachev.com/special-elements/drop-down-menu-test/";
-        string[] options = { "1", "2", "3", "4" };
         string dDownMenuElements;
 
         driver.Navigate().GoToUrl(url);
 
-        dropDownMenu = driver.FindElement(By.Name("DropDownTest"));
-        TextMessage(dropDownMenu.GetAttribute("value"));
-        Thread.Sleep(1000);
-        
-        foreach (string dDownChoice in options)
+        try
         {
-            TextMessage(dDownChoice);
-            try
+            dropDownMenu = driver.FindElement(By.Name("DropDownTest"));
+            Thread.Sleep(1000);
+
+            for (int i = 0; i < 4; i++)
             {
-                dDownMenuElements = "#post-6 > div > p:nth-child(6) > select > option:nth-child(" + dDownChoice + ")";
+                TextMessage(dropDownMenu.GetAttribute("value"));
+                dDownMenuElements = "#post-6 > div > p:nth-child(6) > select > option:nth-child(" + (i + 1) + ")";
                 dDownMenuElement = driver.FindElement(By.CssSelector(dDownMenuElements));
                 dDownMenuElement.Click();
                 TextMessage("The Selected Value is: " + dropDownMenu.GetAttribute("value"));
 
                 if (dDownMenuElement.GetAttribute("checked") == "true")
                 {
+                    dDownSelection = dropDownMenu.GetAttribute("value");
                     TextMessage(dDownMenuElement.GetAttribute("value"));
-                    GreenMessage("This drop down element is selected");
+                    GreenMessage("This drop down option is selected");
                 }
                 else
                 {
-                    TextMessage("This is NOT selected");
+                    TextMessage("This is NOT checked");
                 }
-            }
-            catch (NoSuchElementException)
-            {
-                RedMessage("I am NOT seeing drop down element I expect to see");
-            }
 
-            Thread.Sleep(3000);
+                Thread.Sleep(3000);
+            }
         }
-
+        catch (NoSuchElementException)
+        {
+            RedMessage("I am NOT seeing drop down option " + dDownSelection + " I expect to see");
+        }
         Thread.Sleep(4000);
         driver.Quit();
     }
@@ -75,4 +74,3 @@ class EntryPoint
         Console.ForegroundColor = ConsoleColor.Gray;
     }
 }
-
